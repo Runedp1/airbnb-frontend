@@ -9,7 +9,6 @@ import BookingPage from "./components/BookingPage.vue";
 import MyBookings from "./components/MyBookings.vue"; 
 import ChangeUserInfo from "./components/ChangeUserInfo.vue";
 import OwnerMainPage from './components/OwnerMainPage.vue';
-import CreateCampingSpot from './components/CreateCampingSpot.vue';
 import UserSignUp from "./components/UserSignUp.vue";
 import OwnerSignUp from "./components/OwnerSignUp.vue";
 
@@ -25,7 +24,6 @@ const routes = [
   { path: '/my-bookings', component: MyBookings,  meta: { requiresAuth: true } }, 
   { path: "/user-info", component: ChangeUserInfo,  meta: { requiresAuth: true } }, 
   { path: '/owner-main', component: OwnerMainPage },
-  { path: '/create-campingspot', component: CreateCampingSpot },
   { path: "/user-signup", component: UserSignUp },
   { path: "/owner-signup", component: OwnerSignUp },
 ];

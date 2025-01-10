@@ -18,5 +18,12 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+
+  /* Add light green background */
+  background-color: #d4f5d5; /* Light green color */
+  min-height: 100vh; /* Ensure it covers the full height of the viewport */
+  margin: 0; /* Remove default margin to make it consistent */
 }
+
+
 </style>

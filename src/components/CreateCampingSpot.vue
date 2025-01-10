@@ -1,111 +1,150 @@
 <template>
-    <div class="create-spot">
-      <h1>Nieuwe Kampeerplek</h1>
-      <form @submit.prevent="createSpot">
-        <label>Naam:</label>
-        <input v-model="name" required />
-  
-        <label>Beschrijving:</label>
-        <textarea v-model="description"></textarea>
-  
-        <label>Locatie (Adres):</label>
-        <input v-model="location" required />
-  
-        <label>Provincie:</label>
-        <select v-model="province" required>
-          <option value="Antwerpen">Antwerpen</option>
-          <option value="Limburg">Limburg</option>
-          <option value="Oost-Vlaanderen">Oost-Vlaanderen</option>
-          <option value="West-Vlaanderen">West-Vlaanderen</option>
-          <option value="Vlaams-Brabant">Vlaams-Brabant</option>
-        </select>
-  
-        <label>Prijs per nacht (€):</label>
-        <input type="number" v-model="price_per_night" required />
-  
-        <label>Faciliteiten:</label>
-        <input v-model="facilities" />
-  
-        <label>Type:</label>
-        <select v-model="type" required>
-          <option value="tent">Tent</option>
-          <option value="rv">RV</option>
-          <option value="cabin">Cabin</option>
-        </select>
-  
-        <button type="submit">Plek Aanmaken</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import axios from "axios";
-  
-  export default {
-    data() {
-      return {
-        name: "",
-        description: "",
-        location: "",
-        price_per_night: "",
-        facilities: "",
-        type: "tent",
-        province: "Antwerpen",
-      };
-    },
-    methods: {
-      async createSpot() {
-        const owner = JSON.parse(localStorage.getItem("user"));
-        if (!owner) {
-          this.$router.push("/owner-login");
-          return;
-        }
-  
-        const newSpot = {
-          owner_id: owner.id,
+  <div class="create-spot">
+    <h2>Maak een Nieuwe Kampeerplek</h2>
+    <form @submit.prevent="createCampingSpot">
+      <label>Naam:</label>
+      <input v-model="name" type="text" required />
+
+      <label>Beschrijving:</label>
+      <textarea v-model="description" required></textarea>
+
+      <label>Locatie:</label>
+      <input v-model="location" type="text" required />
+
+      <label>Prijs per Nacht:</label>
+      <input v-model="price_per_night" type="number" required />
+
+      <label>Type:</label>
+      <select v-model="type" required>
+        <option value="tent">Tent</option>
+        <option value="rv">RV</option>
+        <option value="cabin">Cabin</option>
+      </select>
+
+      <label>Faciliteiten:</label>
+      <input v-model="facilities" type="text" />
+
+      <label>Provincie:</label>
+      <select v-model="province" required>
+        <option disabled value="">Selecteer een provincie</option>
+        <option value="Antwerpen">Antwerpen</option>
+        <option value="Oost-Vlaanderen">Oost-Vlaanderen</option>
+        <option value="West-Vlaanderen">West-Vlaanderen</option>
+        <option value="Limburg">Limburg</option>
+        <option value="Vlaams-Brabant">Vlaams-Brabant</option>
+        <option value="Brussels Hoofdstedelijk Gewest">Brussels Hoofdstedelijk Gewest</option>
+        <option value="Henegouwen">Henegouwen</option>
+        <option value="Luik">Luik</option>
+        <option value="Luxemburg">Luxemburg</option>
+        <option value="Namen">Namen</option>
+      </select>
+
+      <button type="submit">Maak Kampeerplek</button>
+    </form>
+    <p v-if="message" :class="{ success: success, error: !success }">{{ message }}</p>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      name: '',
+      description: '',
+      location: '',
+      price_per_night: '',
+      type: 'tent',
+      facilities: '',
+      province: '',
+      message: '',
+      success: false
+    };
+  },
+  methods: {
+    async createCampingSpot() {
+      const owner_id = localStorage.getItem('owner_id');
+      try {
+        await axios.post('http://localhost:3002/api/owner/campingspots', {
+          owner_id,
           name: this.name,
           description: this.description,
           location: this.location,
           price_per_night: this.price_per_night,
-          facilities: this.facilities,
           type: this.type,
-          province: this.province,
-        };
-  
-        try {
-          await axios.post("http://localhost:3002/api/owner/campingspots", newSpot);
-          alert("Kampeerplek succesvol aangemaakt!");
-          this.$router.push("/owner-main");
-        } catch (error) {
-          console.error("Error creating spot:", error);
-          alert("Kon de kampeerplek niet aanmaken.");
-        }
-      },
+          facilities: this.facilities,
+          province: this.province
+        });
+        this.success = true;
+        this.message = 'Kampeerplek succesvol aangemaakt!';
+        this.resetForm();
+      } catch (error) {
+        this.success = false;
+        this.message = 'Fout bij het aanmaken van de kampeerplek.';
+        console.error('Error creating camping spot:', error);
+      }
     },
-  };
-  </script>
-  
-  <style scoped>
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    resetForm() {
+      this.name = '';
+      this.description = '';
+      this.location = '';
+      this.price_per_night = '';
+      this.type = 'tent';
+      this.facilities = '';
+      this.province = '';
+    }
   }
-  
-  input,
-  textarea,
-  select {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  </style>
+};
+</script>
+
+<style scoped>
+.create-spot {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #3498db;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+.success {
+  color: green;
+  text-align: center;
+}
+.error {
+  color: red;
+  text-align: center;
+}
+</style>

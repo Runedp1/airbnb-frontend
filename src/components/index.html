@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boek een Kampeerplek</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Boek een Kampeerplek</h1>
+        <h2>Zonnige Weiden</h2>
+        <p>Locatie: Brugge</p>
+        <p>Prijs: €25.00 per nacht</p>
+        <p>Type: tent</p>
+        <p><strong>Kies je data:</strong></p>
+        
+        <!-- Calendar Container -->
+        <div class="calendar">
+            <!-- Replace this section with your calendar implementation -->
+            <input type="date" id="start-date" />
+            <input type="date" id="end-date" />
+        </div>
+
+        <!-- Booking Button -->
+        <button class="boek-nu" onclick="handleBooking()">Boek Nu</button>
+    </div>
+
+    <script>
+        // JavaScript function for button click
+        function handleBooking() {
+            alert('Booking Successful!');
+            // Add additional logic here (e.g., send data to backend)
+        }
+    </script>
+</body>
+</html>

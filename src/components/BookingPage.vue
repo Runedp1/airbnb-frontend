@@ -7,6 +7,7 @@
         <p>Locatie: {{ campingSpot.location }}</p>
         <p>Prijs: €{{ campingSpot.price_per_night }} per nacht</p>
         <p>Type: {{ campingSpot.type }}</p>
+        <p>Beschrijving: {{ campingSpot.description }}</p>
   
         <!-- Date Picker -->
         <h4>Kies je data:</h4>
@@ -94,7 +95,7 @@
           alert("Boeking succesvol!");
   
           // Redirect to the user main page
-          this.$router.push("/user-dashboard");
+          this.$router.push("/user-main");
         } catch (error) {
           console.error("Error creating booking:", error);
           alert("Kon de boeking niet maken.");
